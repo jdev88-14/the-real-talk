@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>THE REAL TALK</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #e0e0e0;
+        background-color: #1e1e1e;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      h1 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #ffffff;
+      }
+
+      h2 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 20px;
+        margin-bottom: 8px;
+        color: #ffffff;
+      }
+
+      button {
+        background-color: #18a0fb;
+        border: none;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s;
+      }
+
+      button:hover {
+        background-color: #0d8ee0;
+      }
+
+      button.secondary {
+        background-color: #3d3d3d;
+        color: #e0e0e0;
+      }
+
+      button.secondary:hover {
+        background-color: #4d4d4d;
+      }
+
+      button:disabled {
+        background-color: #333333;
+        color: #666666;
+        cursor: not-allowed;
+      }
+
+      input {
+        border: 1px solid #444444;
+        border-radius: 4px;
+        padding: 8px;
+        margin-bottom: 12px;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: #2d2d2d;
+        color: #e0e0e0;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #cccccc;
+      }
+
+      .status {
+        margin-top: 16px;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .status.connected {
+        background-color: #1a472a;
+        color: #4ade80;
+      }
+
+      .status.disconnected {
+        background-color: #471a1a;
+        color: #ff9999;
+      }
+
+      .status.info {
+        background-color: #1a3147;
+        color: #66b3ff;
+      }
+
+      .toggle-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+        margin-right: 8px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        margin: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #444444;
+        transition: 0.4s;
+        border-radius: 20px;
+      }
+
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .toggle-slider {
+        background-color: #18a0fb;
+      }
+
+      input:checked + .toggle-slider:before {
+        transform: translateX(20px);
+      }
+
+      .section {
+        margin-bottom: 24px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .header-text {
+        margin-left: 12px;
+      }
+
+      .header-text h1 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .header-text p {
+        margin: 4px 0 0 0;
+        font-size: 12px;
+        color: #999999;
+      }
+
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid #444444;
+        margin-bottom: 16px;
+      }
+
+      .tab {
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #999999;
+      }
+
+      .tab.active {
+        border-bottom: 2px solid #18a0fb;
+        color: #18a0fb;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .link {
+        color: #18a0fb;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .link:hover {
+        text-decoration: underline;
+      }
+
+      .header-logo {
+        padding: 16px;
+        border-radius: 16px;
+        background-color: #333;
+      }
+
+      .header-logo-image {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+      /* Progress styles */
+      .operation-complete {
+        color: #4ade80;
+      }
+      .operation-error {
+        color: #ff9999;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-text">
+          <h1>THE REAL TALK</h1>
+          <p>Connect your AI agent to Figma Design over MCP. Local and unlimited.</p>
+        </div>
+      </div>
+
+      <div id="channel-display" class="status info" style="margin-top: 0">
+        Channel: <strong id="channel-name">-</strong>
+      </div>
+
+      <div class="tabs">
+        <div id="tab-connection" class="tab active">Connection</div>
+        <div id="tab-about" class="tab">About</div>
+      </div>
+
+      <div id="content-connection" class="tab-content active">
+        <div class="section">
+          <div style="margin-bottom: 16px">
+            <button id="btn-connect" class="primary" style="width: 100%">
+              Connect
+            </button>
+          </div>
+
+          <div id="port-container">
+            <label for="port">WebSocket Server Port</label>
+            <input
+              type="number"
+              id="port"
+              placeholder="3055"
+              value="3055"
+              min="1024"
+              max="65535"
+            />
+          </div>
+
+          <div id="token-container" style="margin-top: 12px">
+            <label for="token">Relay access token</label>
+            <input
+              type="password"
+              id="token"
+              placeholder="contents of ~/.config/the-real-talk/token"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+
+        <div id="connection-status" class="status disconnected">
+          Not connected to THE REAL TALK relay
+        </div>
+
+        <div id="mcp-config" class="section hidden">
+          <h2>MCP Configuration</h2>
+          <p>Add the MCP server to your client (Claude Code example):</p>
+          <textarea
+            id="mcp-json"
+            rows="5"
+            readonly
+            style="
+              width: 100%;
+              background: #2d2d2d;
+              color: #e0e0e0;
+              padding: 12px;
+              border: 1px solid #444444;
+              border-radius: 4px;
+              font-family: monospace;
+              margin-bottom: 8px;
+            "
+          ></textarea>
+          <button id="btn-copy" class="secondary">Copy to Clipboard</button>
+        </div>
+
+        <!-- Add Progress Bar Section -->
+        <div id="progress-container" class="section hidden">
+          <h2>Operation Progress</h2>
+          <div id="progress-message">No operation in progress</div>
+          <div
+            style="
+              width: 100%;
+              background-color: #444;
+              border-radius: 4px;
+              margin-top: 8px;
+            "
+          >
+            <div
+              id="progress-bar"
+              style="
+                width: 0%;
+                height: 8px;
+                background-color: #18a0fb;
+                border-radius: 4px;
+                transition: width 0.3s;
+              "
+            ></div>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-top: 4px;
+              font-size: 12px;
+            "
+          >
+            <div id="progress-status">Not started</div>
+            <div id="progress-percentage">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="content-about" class="tab-content">
+        <div class="section">
+          <h2>About THE REAL TALK</h2>
+          <p>
+            Lets your AI agent read and build in Figma Design: frames,
+            components, styles and variables.
+          </p>
+          <p>Version: 1.0.0</p>
+          <p>
+            Built by Naaser, from Tacelo, tacelo.ch. Based on cursor-talk-to-figma-mcp by
+            Sonny Lazuardi (MIT).
+          </p>
+
+          <h2>How to Use</h2>
+          <ol>
+            <li>Start the relay: <code>bun run socket</code></li>
+            <li>Add the MCP server to your client</li>
+            <li>
+              Run this plugin in your file and paste the access token once. It
+              reconnects by itself after that.
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // WebSocket connection state
+      const state = {
+        connected: false,
+        socket: null,
+        serverPort: 3055,
+        pendingRequests: new Map(),
+        channel: null,
+        fileName: "",
+        refused: false, // channel already held: do not retry
+        manualStop: false, // Disconnect clicked: do not reconnect
+        reconnectTimer: null,
+        reconnectAttempt: 0,
+        heartbeatTimer: null,
+        lastPong: 0,
+        inflight: new Set(), // commands being executed (by id)
+        results: new Map(), // id -> response already computed (resent if the server asks again)
+        heavy: new Map(), // id -> name of the heavy command running or waiting
+        queue: [], // heavy commands waiting (only one runs at a time)
+        running: null, // id of the heavy command currently running
+        // Stable id of this plugin launch: stays the same across reconnections.
+        instanceId: Date.now().toString(36) + Math.random().toString(36).slice(2, 10),
+      };
+
+      // Heavy commands (same names as on the MCP server side): for each one the plugin sends,
+      // on receipt and then every 10 s, an "in progress" signal that pushes back its timeout.
+      const HEAVY_COMMANDS = new Set([
+        "export_node_as_image",
+        "scan_text_nodes",
+        "get_node_info",
+        "build_tree",
+        "get_local_variables",
+        "get_node_raw",
+        "get_nodes_info",
+        "bind_variable_batch",
+        "find_variable_usages",
+        "get_nodes_bindings",
+        "audit_bindings",
+        "rebind_variable_usages",
+      ]);
+
+      function sendWorkSignal(id, command) {
+        if (!state.connected || !state.socket) return;
+        state.socket.send(
+          JSON.stringify({
+            id,
+            type: "progress_update",
+            channel: state.channel,
+            message: {
+              id,
+              type: "progress_update",
+              data: {
+                commandId: id,
+                commandType: command,
+                status: "in_progress",
+                heartbeat: true,
+                message: "en cours",
+              },
+            },
+          })
+        );
+      }
+
+      // Always active (independent of the connection): does nothing while there is no heavy command.
+      setInterval(() => {
+        state.heavy.forEach((command, id) => sendWorkSignal(id, command));
+      }, 10000);
+
+      // Channel = Figma file name normalised (lowercase, no accents, any
+      // sign or space replaced by a dash). Same function on the MCP server side.
+      function slugifyChannel(name) {
+        const slug = String(name || "")
+          .replace(/œ/gi, "oe")
+          .replace(/æ/gi, "ae")
+          .replace(/ß/g, "ss")
+          .replace(/ø/gi, "o")
+          .replace(/ł/gi, "l")
+          .replace(/đ/gi, "d")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+        return slug || "unnamed";
+      }
+
+      // UI Elements
+      const portInput = document.getElementById("port");
+      const tokenInput = document.getElementById("token");
+      const connectButton = document.getElementById("btn-connect");
+      const connectionStatus = document.getElementById("connection-status");
+
+      // Tabs
+      const tabs = document.querySelectorAll(".tab");
+      const tabContents = document.querySelectorAll(".tab-content");
+
+      // Add UI elements for progress tracking
+      const progressContainer = document.getElementById("progress-container");
+      const progressBar = document.getElementById("progress-bar");
+      const progressMessage = document.getElementById("progress-message");
+      const progressStatus = document.getElementById("progress-status");
+      const progressPercentage = document.getElementById("progress-percentage");
+
+      // Initialize UI
+      function updateConnectionStatus(isConnected, message) {
+        state.connected = isConnected;
+
+        let statusMessage =
+          message ||
+          (isConnected
+            ? "Connected to THE REAL TALK relay"
+            : "Not connected to THE REAL TALK relay");
+
+        // Add instructions for localhost when disconnected
+        if (!isConnected) {
+          statusMessage += `<br><br>Start the local relay (bun run socket), then connect`;
+        }
+
+        connectionStatus.innerHTML = statusMessage;
+        connectionStatus.className = `status ${
+          isConnected ? "connected" : "disconnected"
+        }`;
+
+        // Update connect button text and style based on connection state
+        connectButton.textContent = isConnected ? "Disconnect" : "Connect";
+        connectButton.className = isConnected ? "secondary" : "primary";
+        portInput.disabled = isConnected;
+        tokenInput.disabled = isConnected;
+
+        // Show/hide MCP config section
+        const mcpConfig = document.getElementById("mcp-config");
+        mcpConfig.className = `section ${isConnected ? "" : "hidden"}`;
+
+        // Update MCP config text when showing
+        if (isConnected) {
+          updateMcpConfig();
+        }
+      }
+
+      // Connect to WebSocket server
+      async function connectToServer(port) {
+        try {
+          if (state.connected && state.socket) {
+            updateConnectionStatus(true, "Already connected to server");
+            return;
+          }
+
+          state.serverPort = port;
+          state.refused = false;
+          state.manualStop = false;
+          clearTimeout(state.reconnectTimer);
+          const token = tokenInput.value.trim();
+          if (!token) {
+            updateConnectionStatus(
+              false,
+              "Access token required: paste the contents of ~/.config/the-real-talk/token"
+            );
+            return;
+          }
+          // Saved locally by Figma (clientStorage) so it is asked only once.
+          parent.postMessage(
+            { pluginMessage: { type: "update-settings", relayToken: token } },
+            "*"
+          );
+          const wsUrl = `ws://localhost:${port}/?token=${encodeURIComponent(token)}`;
+
+          state.socket = new WebSocket(wsUrl);
+
+          state.socket.onopen = () => {
+            // Fixed channel: the normalised Figma file name.
+            const channelName = slugifyChannel(state.fileName);
+            console.log("Joining channel:", channelName);
+            state.channel = channelName;
+            showChannel();
+
+            state.socket.send(
+              JSON.stringify({
+                type: "join",
+                channel: channelName,
+                role: "plugin",
+                instanceId: state.instanceId,
+                fileName: state.fileName,
+              })
+            );
+          };
+
+          state.socket.onmessage = (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              console.log("Received message:", data);
+
+              if (data.type === "pong") {
+                state.lastPong = Date.now();
+                return;
+              }
+              if (data.type === "system") {
+                // Successfully joined channel
+                if (data.message && data.message.result) {
+                  state.connected = true;
+                  state.reconnectAttempt = 0;
+                  startHeartbeat();
+                  const channelName = data.channel;
+                  updateConnectionStatus(
+                    true,
+                    `Connected to server in channel: <strong>${channelName}</strong>`
+                  );
+
+                  // Notify the plugin code
+                  parent.postMessage(
+                    {
+                      pluginMessage: {
+                        type: "notify",
+                        message: `Connected on port ${port} in channel: ${channelName}`,
+                      },
+                    },
+                    "*"
+                  );
+                }
+              } else if (data.type === "error") {
+                console.error("Error:", data.message);
+                // Channel already held by another plugin: keep the message displayed
+                // (onclose does not overwrite it) and do not retry.
+                if (data.code === "channel_taken") {
+                  state.refused = true;
+                }
+                updateConnectionStatus(false, `Error: ${data.message}`);
+                state.socket.close();
+              }
+
+              handleSocketMessage(data);
+            } catch (error) {
+              console.error("Error parsing message:", error);
+            }
+          };
+
+          state.socket.onclose = () => {
+            state.connected = false;
+            state.socket = null;
+            stopHeartbeat();
+            if (!state.refused && !state.manualStop) {
+              scheduleReconnect();
+            } else if (!state.refused) {
+              updateConnectionStatus(false, "Disconnected from server");
+            }
+          };
+
+          state.socket.onerror = (error) => {
+            console.error("WebSocket error:", error);
+            updateConnectionStatus(false, "Connection error");
+            state.connected = false;
+            state.socket = null;
+          };
+        } catch (error) {
+          console.error("Connection error:", error);
+          updateConnectionStatus(
+            false,
+            `Connection error: ${error.message || "Unknown error"}`
+          );
+        }
+      }
+
+      // Heartbeat: a ping every 15 s, the relay answers pong. With no answer
+      // for 2 minutes (generous: timers in a background tab are
+      // throttled), the connection is deemed dead and closed, which triggers reconnection.
+      function startHeartbeat() {
+        stopHeartbeat();
+        state.lastPong = Date.now();
+        state.heartbeatTimer = setInterval(() => {
+          if (!state.socket || state.socket.readyState !== WebSocket.OPEN) return;
+          if (Date.now() - state.lastPong > 120000) {
+            state.socket.close();
+            return;
+          }
+          state.socket.send(JSON.stringify({ type: "ping" }));
+        }, 15000);
+      }
+
+      function stopHeartbeat() {
+        clearInterval(state.heartbeatTimer);
+        state.heartbeatTimer = null;
+      }
+
+      // Automatic reconnection on the same channel, with growing waits (1 s, 2 s, 4 s ... 30 s).
+      function scheduleReconnect() {
+        clearTimeout(state.reconnectTimer);
+        const delay = Math.min(30000, 1000 * 2 ** state.reconnectAttempt);
+        state.reconnectAttempt += 1;
+        connectionStatus.className = "status info";
+        updateConnectionStatus(
+          false,
+          `Connection lost. Reconnecting in ${Math.round(delay / 1000)} s (attempt ${state.reconnectAttempt}), channel <strong>${state.channel || slugifyChannel(state.fileName)}</strong>`
+        );
+        connectionStatus.className = "status info";
+        state.reconnectTimer = setTimeout(() => {
+          connectToServer(parseInt(portInput.value, 10) || 3055);
+        }, delay);
+      }
+
+      // Disconnect from websocket server
+      function disconnectFromServer() {
+        state.manualStop = true;
+        clearTimeout(state.reconnectTimer);
+        stopHeartbeat();
+        if (state.socket) {
+          state.socket.close();
+          state.socket = null;
+          state.connected = false;
+          updateConnectionStatus(false, "Disconnected from server");
+        }
+      }
+
+      // Handle messages from the WebSocket
+      async function handleSocketMessage(payload) {
+        const data = payload.message;
+        console.log("handleSocketMessage", data);
+
+        // If it's a response to a previous request
+        if (data.id && state.pendingRequests.has(data.id)) {
+          const { resolve, reject } = state.pendingRequests.get(data.id);
+          state.pendingRequests.delete(data.id);
+
+          if (data.error) {
+            reject(new Error(data.error));
+          } else {
+            resolve(data.result);
+          }
+          return;
+        }
+
+        // If it's a new command
+        if (data.command) {
+          // The MCP server resends a call (same id) after a reconnection: if it was already
+          // executed, resend the kept response; if it is still running, wait for it to finish.
+          if (state.results.has(data.id)) {
+            const kept = state.results.get(data.id);
+            if (kept.error !== undefined) sendErrorResponse(data.id, kept.error);
+            else sendSuccessResponse(data.id, kept.result);
+            return;
+          }
+          if (state.inflight.has(data.id)) {
+            // Already running: nothing is restarted, we only confirm it is alive.
+            if (state.heavy.has(data.id)) sendWorkSignal(data.id, state.heavy.get(data.id));
+            return;
+          }
+          state.inflight.add(data.id);
+          if (HEAVY_COMMANDS.has(data.command)) {
+            state.heavy.set(data.id, data.command);
+            sendWorkSignal(data.id, data.command);
+          }
+          try {
+            if (HEAVY_COMMANDS.has(data.command)) {
+              // Heavy commands run one by one, in order of arrival.
+              state.queue.push({ id: data.id, command: data.command, params: data.params });
+              pumpQueue();
+            } else {
+              state.activeRequestId = data.id;
+              runCommand(data.id, data.command, data.params);
+            }
+          } catch (error) {
+            // Send error back to WebSocket
+            sendErrorResponse(
+              data.id,
+              error.message || "Error executing command"
+            );
+          }
+        }
+      }
+
+      // Sends the command to the plugin code.
+      function runCommand(id, command, params) {
+        parent.postMessage(
+          { pluginMessage: { type: "execute-command", id, command, params } },
+          "*"
+        );
+      }
+
+      // Starts the next heavy command if none is running.
+      function pumpQueue() {
+        if (state.running || state.queue.length === 0) return;
+        const next = state.queue.shift();
+        state.running = next.id;
+        state.activeRequestId = next.id;
+        try {
+          runCommand(next.id, next.command, next.params);
+        } catch (error) {
+          sendErrorResponse(next.id, error.message || "Error executing command");
+        }
+      }
+
+      // Send a command to the WebSocket server
+      async function sendCommand(command, params) {
+        return new Promise((resolve, reject) => {
+          if (!state.connected || !state.socket) {
+            reject(new Error("Not connected to server"));
+            return;
+          }
+
+          const id = generateId();
+          state.pendingRequests.set(id, { resolve, reject });
+
+          state.socket.send(
+            JSON.stringify({
+              id,
+              type: "message",
+              channel: state.channel,
+              message: {
+                id,
+                command,
+                params,
+              },
+            })
+          );
+
+          // Set timeout to reject the promise after 30 seconds
+          setTimeout(() => {
+            if (state.pendingRequests.has(id)) {
+              state.pendingRequests.delete(id);
+              reject(new Error("Request timed out"));
+            }
+          }, 30000);
+        });
+      }
+
+      // Send success response back to WebSocket
+      // Keeps the response (last 30): if the connection drops before sending, it will be
+      // resent as is when the server asks for this id again, without replaying the command.
+      function keepResult(id, entry) {
+        state.inflight.delete(id);
+        state.heavy.delete(id);
+        state.results.set(id, entry);
+        // At most 30 responses and 64 MB in total (the oldest go first).
+        let total = 0;
+        state.results.forEach((e) => (total += e.size || 0));
+        while (state.results.size > 1 && (state.results.size > 30 || total > 64 * 1024 * 1024)) {
+          const oldest = state.results.keys().next().value;
+          total -= state.results.get(oldest).size || 0;
+          state.results.delete(oldest);
+        }
+        if (state.running === id) {
+          state.running = null;
+          pumpQueue();
+        }
+      }
+
+      // Above 1 MB, the response is sent in 512 KB chunks (the relay refuses overly large
+      // messages); the MCP server reassembles them.
+      const CHUNK_THRESHOLD = 1024 * 1024;
+      const CHUNK_SIZE = 512 * 1024;
+
+      function sendSuccessResponse(id, result) {
+        const payload = JSON.stringify(result === undefined ? null : result);
+        keepResult(id, { result, size: payload.length });
+        if (!state.connected || !state.socket) {
+          console.error("Cannot send response: socket not connected");
+          return;
+        }
+
+        if (payload.length > CHUNK_THRESHOLD) {
+          const total = Math.ceil(payload.length / CHUNK_SIZE);
+          for (let index = 0; index < total; index++) {
+            state.socket.send(
+              JSON.stringify({
+                id,
+                type: "message",
+                channel: state.channel,
+                message: {
+                  id,
+                  chunk: { index, total, data: payload.slice(index * CHUNK_SIZE, (index + 1) * CHUNK_SIZE) },
+                },
+              })
+            );
+          }
+          return;
+        }
+
+        state.socket.send(
+          JSON.stringify({
+            id,
+            type: "message",
+            channel: state.channel,
+            message: {
+              id,
+              result,
+            },
+          })
+        );
+      }
+
+      // Send error response back to WebSocket
+      function sendErrorResponse(id, errorMessage) {
+        keepResult(id, { error: errorMessage });
+        if (!state.connected || !state.socket) {
+          console.error("Cannot send error response: socket not connected");
+          return;
+        }
+
+        state.socket.send(
+          JSON.stringify({
+            id,
+            type: "message",
+            channel: state.channel,
+            message: {
+              id,
+              error: errorMessage,
+              result: {},
+            },
+          })
+        );
+      }
+
+      // Helper to generate unique IDs
+      function generateId() {
+        return (
+          Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
+        );
+      }
+
+      function showChannel() {
+        document.getElementById("channel-name").textContent =
+          (state.channel || slugifyChannel(state.fileName)) +
+          (state.fileName ? "  (" + state.fileName + ")" : "");
+      }
+
+      // Tab switching
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((t) => t.classList.remove("active"));
+          tabContents.forEach((c) => c.classList.remove("active"));
+
+          tab.classList.add("active");
+          const contentId = "content-" + tab.id.split("-")[1];
+          document.getElementById(contentId).classList.add("active");
+        });
+      });
+
+      // Replace the separate connect/disconnect button listeners with a single toggle
+      connectButton.addEventListener("click", () => {
+        if (state.connected) {
+          updateConnectionStatus(false, "Disconnecting...");
+          connectionStatus.className = "status info";
+          disconnectFromServer();
+        } else {
+          const port = parseInt(portInput.value, 10) || 3055;
+          updateConnectionStatus(false, "Connecting...");
+          connectionStatus.className = "status info";
+          connectToServer(port);
+        }
+      });
+
+      // Function to update progress UI
+      function updateProgressUI(progressData) {
+        // Show progress container if hidden
+        progressContainer.classList.remove("hidden");
+
+        // Update progress bar
+        const progress = progressData.progress || 0;
+        progressBar.style.width = `${progress}%`;
+        progressPercentage.textContent = `${progress}%`;
+
+        // Update message
+        progressMessage.textContent =
+          progressData.message || "Operation in progress";
+
+        // Update status text based on operation state
+        if (progressData.status === "started") {
+          progressStatus.textContent = "Started";
+          progressStatus.className = "";
+        } else if (progressData.status === "in_progress") {
+          progressStatus.textContent = "In Progress";
+          progressStatus.className = "";
+        } else if (progressData.status === "completed") {
+          progressStatus.textContent = "Completed";
+          progressStatus.className = "operation-complete";
+
+          // Hide progress container after 5 seconds
+          setTimeout(() => {
+            progressContainer.classList.add("hidden");
+          }, 5000);
+        } else if (progressData.status === "error") {
+          progressStatus.textContent = "Error";
+          progressStatus.className = "operation-error";
+        }
+      }
+
+      // Send operation progress update to server
+      function sendProgressUpdateToServer(progressData) {
+        if (!state.connected || !state.socket) {
+          console.error("Cannot send progress update: socket not connected");
+          return;
+        }
+
+        console.log("Sending progress update to server:", progressData);
+
+        const requestId = state.activeRequestId || progressData.commandId;
+        state.socket.send(
+          JSON.stringify({
+            id: requestId,
+            type: "progress_update",
+            channel: state.channel,
+            message: {
+              id: requestId,
+              type: "progress_update",
+              data: progressData,
+            },
+          })
+        );
+      }
+
+      // Reset progress UI
+      function resetProgressUI() {
+        progressContainer.classList.add("hidden");
+        progressBar.style.width = "0%";
+        progressMessage.textContent = "No operation in progress";
+        progressStatus.textContent = "Not started";
+        progressStatus.className = "";
+        progressPercentage.textContent = "0%";
+      }
+
+      // Listen for messages from the plugin code
+      window.onmessage = (event) => {
+        const message = event.data.pluginMessage;
+        if (!message) return;
+
+        console.log("Received message from plugin:", message);
+
+        switch (message.type) {
+          case "connection-status":
+            updateConnectionStatus(message.connected, message.message);
+            break;
+          case "init-settings":
+            state.fileName = message.fileName || "";
+            showChannel();
+            if (message.settings && message.settings.relayToken) {
+              tokenInput.value = message.settings.relayToken;
+            }
+            if (message.settings && message.settings.serverPort) {
+              portInput.value = message.settings.serverPort;
+            }
+            // Automatic connection on launch: stored token and port, no click.
+            // Without a stored token, the Connect button is the fallback.
+            if (message.autoConnect && !state.connected && !state.socket) {
+              if (tokenInput.value.trim()) {
+                connectionStatus.className = "status info";
+                updateConnectionStatus(false, "Connecting...");
+                connectionStatus.className = "status info";
+                connectToServer(parseInt(portInput.value, 10) || 3055);
+              } else {
+                updateConnectionStatus(
+                  false,
+                  "No saved token: paste it below, then click Connect"
+                );
+              }
+            }
+            break;
+          case "command-result":
+            // Forward the result from plugin code back to WebSocket
+            sendSuccessResponse(message.id, message.result);
+            break;
+          case "command-error":
+            // Forward the error from plugin code back to WebSocket
+            sendErrorResponse(message.id, message.error);
+            break;
+          case "command_progress":
+            // Update UI with progress information
+            updateProgressUI(message);
+            // Forward progress update to server
+            sendProgressUpdateToServer(message);
+            break;
+        }
+      };
+
+      // Add this to the script section, after all the other event listeners
+      document.getElementById("btn-copy").addEventListener("click", () => {
+        const textarea = document.getElementById("mcp-json");
+        textarea.select();
+        document.execCommand("copy");
+        const button = document.getElementById("btn-copy");
+        button.textContent = "Copied!";
+        setTimeout(() => {
+          button.textContent = "Copy to Clipboard";
+        }, 2000);
+      });
+
+      // Add this function to the script section
+      function updateMcpConfig() {
+        document.getElementById("mcp-json").value =
+          "claude mcp add TheRealTalk -- bun run /absolute/path/to/the-real-talk/dist/server.js";
+      }
+    </script>
+  </body>
+</html>

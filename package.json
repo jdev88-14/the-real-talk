@@ -1,0 +1,35 @@
+{
+  "name": "the-real-talk",
+  "description": "THE REAL TALK: connect your AI agent to Figma Design over MCP",
+  "version": "1.0.0",
+  "module": "dist/server.js",
+  "main": "dist/server.js",
+  "bin": {
+    "the-real-talk": "dist/server.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "scripts": {
+    "start": "bun run dist/server.js",
+    "socket": "bun run src/socket.ts",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "dev": "bun run build:watch"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "bun-types": "^1.2.5",
+    "tsup": "^8.4.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.13.1",
+    "uuid": "latest",
+    "ws": "latest",
+    "zod": "3.22.4"
+  },
+  "private": true
+}

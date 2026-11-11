@@ -1,0 +1,23 @@
+{
+  "name": "THE REAL TALK",
+  "id": "1485687494525374295",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": [
+    "figma",
+    "figjam"
+  ],
+  "permissions": [],
+  "networkAccess": {
+    "allowedDomains": [
+      "ws://localhost:3055"
+    ],
+    "reasoning": "Connects only to the local relay on localhost:3055. No other network access.",
+    "devAllowedDomains": [
+      "http://localhost:3055",
+      "ws://localhost:3055"
+    ]
+  },
+  "documentAccess": "dynamic-page"
+}
